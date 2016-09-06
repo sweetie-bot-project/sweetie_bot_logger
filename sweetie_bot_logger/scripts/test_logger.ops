@@ -10,4 +10,5 @@ runScript("logging.ops");
 # Load test component
 
 loadComponent("test", "sweetie_bot::LoggerTest");
+test.start
 

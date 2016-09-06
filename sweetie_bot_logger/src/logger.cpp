@@ -1,5 +1,7 @@
 #include "logger.hpp"
 
+#include <rtt/os/MutexLock.hpp>
+
 #include <orocos/rosgraph_msgs/typekit/Log.h>
 #include <orocos/rtt_roscomm/rtt_rostopic.h>
 
@@ -46,7 +48,11 @@ namespace sweetie_bot {
 			rosout_msg.name = category->getName();
 			rosout_msg.msg = oss.str().c_str();
 
-			rosout_port.write(rosout_msg);
+			{
+				RTT::os::MutexLock(port_lock); 
+				// prevent simultenios write attempts
+				rosout_port.write(rosout_msg);
+			}
 		}
 		this->clear();
 	}

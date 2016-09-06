@@ -3,6 +3,8 @@
 
 #include <rtt/RTT.hpp>
 #include <rtt/Logger.hpp>
+#include <rtt/os/Mutex.hpp>
+
 #include <orocos/ocl/Category.hpp>
 #include <orocos/ocl/CategoryStream.hpp>
 
@@ -173,6 +175,7 @@ class LoggerLog4Cpp : public Logger
 class LoggerRosout : public Logger
 {
 	protected:
+		RTT::os::Mutex port_lock; 
 		RTT::OutputPort< rosgraph_msgs::Log > rosout_port;
 		rosgraph_msgs::Log rosout_msg;
 
