@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "cpf.dtd">
+<properties>
+	<struct name="Levels" type="PropertyBag">
+		<simple name="orocos.ocl" type="string"><value>debug</value></simple>
+		<simple name="orocos.rosout.ocl" type="string"><value>info</value></simple>
+	</struct>
+
+	<struct name="Additivity" type="PropertyBag">
+		<description>A PropertyBag defining the additivity of each category of interest.</description>
+	</struct>
+
+	<struct name="Appenders" type="PropertyBag">
+		<simple name="orocos.ocllogger" type="string"><value>log_ocl_rosout</value></simple>
+		<simple name="orocos.ocllogger" type="string"><value>log_ocl_file</value></simple>
+		<simple name="orocos.rosout.ocl" type="string"><value>log_ocl_rosout</value></simple>
+		<simple name="orocos.rosout.ocl" type="string"><value>log_ocl_file</value></simple>
+	</struct>
+</properties>

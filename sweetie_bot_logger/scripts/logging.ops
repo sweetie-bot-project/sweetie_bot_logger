@@ -1,0 +1,54 @@
+# LOGGER DEPLOYMENT SCRIPT
+#
+# Deploy logging forwarding from log4cpp and OCL::logging to rosout
+#
+
+#import("rtt_ros")
+import("sweetie_bot_logger");
+
+
+#
+# CONFIG: OCL::logging::Category --> rosout, logger-ocl.log
+# Works with and without ros and log4cpp deployer support.
+#
+
+# Deploy OCL::logging infrastructure.
+
+# file logging 
+loadComponent("log_ocl_file", "OCL::logging::FileAppender");
+setActivity("log_ocl_file", 0.1, 0, 0);
+log_ocl_file.Filename = "logger-ocl.log";
+log_ocl_file.MaxEventsPerCycle = 50;
+
+# rosout logging 
+loadComponent("log_ocl_rosout", "RosAppender");
+setActivity("log_ocl_file", 0.1, 0, 0);
+log_ocl_rosout.MaxEventsPerCycle = 50;
+ 
+loadComponent("log_ocl", "OCL::logging::LoggingService")
+setActivity("log_ocl", 0.5, 0, 0)
+loadService("log_ocl","marshalling")
+addPeer("log_ocl","log_ocl_file")
+addPeer("log_ocl","log_ocl_rosout")
+log_ocl.marshalling.loadProperties("log_ocl.cpf")
+
+# start
+log_ocl_file.configure
+log_ocl_rosout.configure
+log_ocl.configure
+
+log_ocl_file.start
+log_ocl_rosout.start
+log_ocl.start
+
+
+# CONFIG: RTT::Logger --> rosout
+#
+# Forward log from Deployer to rosout.
+# IMPORTANT! Works only for deployer with log4cpp support.
+#
+# IMPORTANT! Works only for deployer with log4cpp support.
+# 
+
+loadService("log_ocl", "rosout");
+# log_ocl.rosout.addCategory("org.orocos.rtt", 20); // output Category for RTT::Logger, buffer for 20 messages

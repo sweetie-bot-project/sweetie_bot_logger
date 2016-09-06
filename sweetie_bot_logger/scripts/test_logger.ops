@@ -1,0 +1,13 @@
+#
+# GREAT AND POWERFULL LOGGER test script
+#
+
+# log4cpp infrastructure depoys via "--rtt-log4cpp-config-file" argument.
+
+# OCL::Logging infrastructure
+runScript("logging.ops");
+
+# Load test component
+
+loadComponent("test", "sweetie_bot::LoggerTest");
+
