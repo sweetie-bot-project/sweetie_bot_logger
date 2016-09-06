@@ -2,10 +2,8 @@
 #
 # Deploy logging forwarding from log4cpp and OCL::logging to rosout
 #
-
-#import("rtt_ros")
-import("sweetie_bot_logger");
-
+import("rtt_ros")
+ros.import("sweetie_bot_logger");
 
 #
 # CONFIG: OCL::logging::Category --> rosout, logger-ocl.log
@@ -47,8 +45,10 @@ log_ocl.start
 # Forward log from Deployer to rosout.
 # IMPORTANT! Works only for deployer with log4cpp support.
 #
-# IMPORTANT! Works only for deployer with log4cpp support.
+# Bug! OROCOS does not call ~Service(), so port is connected during RosAppender destruction.
+# Log attempt from ConnectionManger causes deadlock. Currently bug is solved by adding
+# assert (port.disconnected) in  ~RosAppender().
 # 
 
-loadService("log_ocl", "rosout");
-# log_ocl.rosout.addCategory("org.orocos.rtt", 20); // output Category for RTT::Logger, buffer for 20 messages
+loadService("Deployer", "rosout");
+rosout.addCategory("org.orocos.rtt", 20); # output Category for RTT::Logger, buffer for 20 messages

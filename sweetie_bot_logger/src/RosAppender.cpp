@@ -67,10 +67,7 @@ namespace log4cpp {
 
 	RosAppender::~RosAppender() {
 		// prevent deadlock due to logging attempt
-	/*	RTT::Logger::LogLevel level = RTT::log().getLogLevel();
-		RTT::log().setLogLevel(RTT::Logger::Never);
-		rosout_port.disconnect();
-		RTT::log().setLogLevel(level); */
+		assert( ! rosout_port.connected() ); // RosAppender: deadlock othervise
 	}
 }
 

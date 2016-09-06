@@ -3,7 +3,7 @@
 <properties>
 	<struct name="Levels" type="PropertyBag">
 		<simple name="orocos.ocl" type="string"><value>debug</value></simple>
-		<simple name="orocos.rosout.ocl" type="string"><value>info</value></simple>
+		<simple name="orocos.ocl.rosout" type="string"><value>info</value></simple>
 	</struct>
 
 	<struct name="Additivity" type="PropertyBag">
@@ -11,9 +11,7 @@
 	</struct>
 
 	<struct name="Appenders" type="PropertyBag">
-		<simple name="orocos.ocllogger" type="string"><value>log_ocl_rosout</value></simple>
-		<simple name="orocos.ocllogger" type="string"><value>log_ocl_file</value></simple>
-		<simple name="orocos.rosout.ocl" type="string"><value>log_ocl_rosout</value></simple>
-		<simple name="orocos.rosout.ocl" type="string"><value>log_ocl_file</value></simple>
+		<simple name="orocos.ocl" type="string"><value>log_ocl_rosout</value></simple>
+		<simple name="orocos.ocl" type="string"><value>log_ocl_file</value></simple>
 	</struct>
 </properties>

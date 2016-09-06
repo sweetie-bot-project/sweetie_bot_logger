@@ -14,9 +14,9 @@ public:
 		Service("rosout", tc)
 	{
 		doc("Forward log4cpp log to rosout.");
-		this->addOperation("addCategory", &RosAppenderService::addCategory, this, ClientThread)
+		this->addOperation("addCategory", &RosAppenderService::addCategory, this, OwnThread)
 			.doc("Add rosout appender to category.");
-		this->addOperation("removeCategory", &RosAppenderService::removeCategory, this, ClientThread)
+		this->addOperation("removeCategory", &RosAppenderService::removeCategory, this, OwnThread)
 			.doc("Remove rosout appender.");
 	}
 
@@ -71,13 +71,10 @@ public:
 	~RosAppenderService() {
 		// Close port before removing appender from all Categories.
 		// Othervise RTT::logger may try to log using appender during destruction. This causes lock.
-		RTT::log(Error) << "RosAppenderService destrucot" << RTT::endlog();
-		std::cout << "RosAppenderService destrucot" << std::endl;
 		std::vector<log4cpp::Category*> * categories = log4cpp::Category::getCurrentCategories();
 		for(std::vector<log4cpp::Category*>::iterator c = categories->begin(); c != categories->end(); c++) {
 			log4cpp::Appender * appender = (*c)->getAppender("rosout");
 			if (appender) { 
-				std::cout << "Disconnect ros_appender." << std::endl;
 				appender->close();
 			}
 		}
