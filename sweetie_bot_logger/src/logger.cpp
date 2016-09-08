@@ -49,7 +49,7 @@ namespace sweetie_bot {
 			rosout_msg.msg = oss.str().c_str();
 
 			{
-				RTT::os::MutexLock(port_lock); 
+				RTT::os::MutexLock lock(port_lock); 
 				// prevent simultenios write attempts
 				rosout_port.write(rosout_msg);
 			}

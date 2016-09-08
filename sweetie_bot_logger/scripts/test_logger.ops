@@ -4,8 +4,17 @@
 
 # log4cpp infrastructure depoys via "--rtt-log4cpp-config-file" argument.
 
+import("rtt_ros")
+ros.import("rtt_rospack");
+#loadService("Deployer", "scripting");
+
+var string LOGGER_SCRIPTS = ros.find("sweetie_bot_logger") + "/scripts/"
+
 # OCL::Logging infrastructure
-runScript("logging.ops");
+#scripting.loadPrograms(LOGGER_SCRIPTS + "setup_logging.ops");
+#setup_logging(LOGGER_SCRIPTS + "log_ocl.cpf", "orocos-ocl.log", true);
+
+runScript(LOGGER_SCRIPTS + "logging.ops");
 
 # Load test component
 
