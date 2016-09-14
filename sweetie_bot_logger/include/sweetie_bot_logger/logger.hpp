@@ -22,6 +22,14 @@ enum LoggerPriority {
 	FATAL = log4cpp::Priority::FATAL,
 };
 
+//TODO Where should be this code?
+//Convinence macro fo logging.
+std::ostream& resetfmt(std::ostream& s) {
+	s.copyfmt(std::ios(NULL)); 
+	return s;
+}
+
+
 class Logger
 {
 	public:
@@ -48,7 +56,7 @@ class Logger
 		{}
 
 		Logger(const string& category_name) : 
-			category(log4cpp::Category::exists(category_name)),
+			category(&log4cpp::Category::getInstance(category_name)),
 			priority(NOTSET),
 			oss("")
 		{}
@@ -128,18 +136,8 @@ class LoggerOCL : public Logger
 
 	public:
 		LoggerOCL() : ocl_category(0) {} 
-
-		LoggerOCL(const string& category_name) :
-			ocl_category(dynamic_cast<OCL::logging::Category*>( log4cpp::Category::exists(category_name) )) 
-		{
-			category = ocl_category;
-		}
-
-		LoggerOCL(OCL::logging::Category * _category) : 
-			ocl_category(dynamic_cast<OCL::logging::Category*>(_category))
-		{
-			category = ocl_category;
-		}
+		LoggerOCL(const string& category_name);
+		LoggerOCL(OCL::logging::Category * _category);
 
 		virtual void flush() {
 			oss << std::ends;
@@ -148,29 +146,16 @@ class LoggerOCL : public Logger
 		}
 };
 
+
 class LoggerLog4Cpp : public Logger 
 {
 	public:
 		LoggerLog4Cpp() {} 
 
-		LoggerLog4Cpp(const string& category_name) : 
-			Logger(category_name)
-		{
-			if (dynamic_cast<OCL::logging::Category*>(category)) {
-				//RTT::log(RTT::Error) << "LoggerLog4Cpp: category '" << category_name << "' is actually OCL::Category. Use LoggerOCL."
-				category = 0;
-			}
-		}
-
-		LoggerLog4Cpp(OCL::logging::Category * _category) : 
-			Logger(_category)
-		{
-			if (dynamic_cast<OCL::logging::Category*>(category)) {
-				//RTT::log(RTT::Error) << "LoggerLog4Cpp: category '" << category_name << "' is actually OCL::Category. Use LoggerOCL."
-				category = 0;
-			}
-		}
+		LoggerLog4Cpp(const string& category_name);
+		LoggerLog4Cpp(OCL::logging::Category * _category);
 };
+
 
 class LoggerRosout : public Logger
 {
@@ -182,14 +167,14 @@ class LoggerRosout : public Logger
 	public:
 		LoggerRosout() : rosout_port("rosout") {}
 
-		LoggerRosout(const string& category_name, int buffer_size) : 
+		LoggerRosout(const string& category_name, int buffer_size = 50) : 
 			Logger(category_name),
 			rosout_port("rosout")
 		{
 			this->reopenStream(buffer_size);
 		}
 
-		LoggerRosout(OCL::logging::Category * _category, int buffer_size) : 
+		LoggerRosout(OCL::logging::Category * _category, int buffer_size = 50) : 
 			Logger(_category),
 			rosout_port("rosout")
 		{

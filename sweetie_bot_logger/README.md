@@ -16,7 +16,7 @@ Native OROCOS logging system suffers a few drawbacks:
 3. `log4cpp::Category` is not realtime, deployer does not support `log4cpp` out of box (recompiling is needed).
 4. All logging systems lack ROS integration.
 
-Great and Powerfull Loger is hear to fix thoese deficiencies! It has many **tricks** under the mantle:
+Great and Powerfull Loger is hear to fix thoese deficiencies! It has many **tricks** under its mantle:
 
 1. `log4cpp::RosAppender` for `log4cpp` which forward messages to `\rosout` ROS topic. 
 2. `RosAppenderService` which able to forward given `log4cpp` category to `\rosut` (use `addCategory` operation).
@@ -32,9 +32,8 @@ Great and Powerfull Loger is hear to fix thoese deficiencies! It has many **tric
 
        log(Logger::INFO) << "I'm GREAT and POWERFULL LOGEER!" << Logger::endl;
 
+   Great and Powerfull Logger generously creates categories for you (despite generosity is clearly not its element).
    Log is flushed by `Logger::endl` manipulator, `RTT::Logger` maipulators are also supported. See `LoggerTest` for example.
-
-   And remember! Great and Powerfull Logger *never creats categories*. It is simply beneath her.
 
 Usage
 -----
