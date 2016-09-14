@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <rtt/Component.hpp>
 
-#include "RosAppender.hpp"
+#include <sweetie_bot_logger/RosAppender.hpp>
 
 using namespace RTT;
 

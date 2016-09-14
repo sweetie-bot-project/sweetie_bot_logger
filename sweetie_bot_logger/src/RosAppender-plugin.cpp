@@ -5,7 +5,7 @@
 #include <log4cpp/Category.hh>
 #include <orocos/ocl/Category.hpp>
 
-#include "RosAppender.hpp"
+#include <sweetie_bot_logger/RosAppender.hpp>
 
 class RosAppenderService : public RTT::Service
 {

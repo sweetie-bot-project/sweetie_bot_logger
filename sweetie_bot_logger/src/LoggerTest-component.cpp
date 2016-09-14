@@ -19,6 +19,8 @@ LoggerTest::LoggerTest(std::string const& name) :
 	log_rosout("orocos.rosout", 20),
 	log_rosout_ocl("orocos.ocl.rosout", 20)
 {
+	RTT::Logger::In in("LoggetTest");
+	//  Loggers state check is mandatory. Constructor reports about error via RTT::Logger.
 	if (! log_ocl.ready()) {
 		RTT::log(RTT::Error) << "Logger log_ocl is not ready!" << RTT::endlog();
 	}
@@ -31,6 +33,7 @@ LoggerTest::LoggerTest(std::string const& name) :
 	if (! log_rosout_ocl.ready()) {
 		RTT::log(RTT::Error) << "Logger log_rosout_ocl is not ready!" << RTT::endlog();
 	}
+	this->provides()->doc("Test component for Great and Powerful Logger from Sweetie Bot project.");
 }
 
 bool LoggerTest::startHook()

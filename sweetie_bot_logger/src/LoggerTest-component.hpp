@@ -3,7 +3,7 @@
 
 #include <rtt/RTT.hpp>
 
-#include "logger.hpp"
+#include <sweetie_bot_logger/logger.hpp>
 
 namespace sweetie_bot {
 

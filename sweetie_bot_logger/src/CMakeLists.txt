@@ -1,6 +1,6 @@
-orocos_install_headers(RosAppender.hpp logger.hpp) 
-orocos_library(logger logger.hpp logger.cpp) # ...you may add multiple source files
-orocos_library(ros_appender RosAppender.hpp RosAppender.cpp) # ...you may add multiple source files
+#orocos_install_headers(RosAppender.hpp logger.hpp) 
+#orocos_library(logger logger.cpp) # ...you may add multiple source files
+#orocos_library(ros_appender RosAppender.cpp) # ...you may add multiple source files
 
 orocos_component(ros_appender_component RosAppender-component.hpp RosAppender-component.cpp) # ...you may add multiple source files
 target_link_libraries(ros_appender_component ros_appender)

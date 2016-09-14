@@ -16,6 +16,7 @@
   <build_depend>ocl</build_depend>
   <build_depend>log4cpp</build_depend>
   <build_depend>orocos-log4cpp</build_depend>
+  <build_depend>catkin</build_depend>
   <build_depend>rtt_rosgraph_msgs</build_depend>
   <build_depend>rtt_roscomm</build_depend>
 
