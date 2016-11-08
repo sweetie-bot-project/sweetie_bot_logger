@@ -13,7 +13,9 @@ class LoggerTest : public RTT::TaskContext{
 		sweetie_bot::LoggerLog4Cpp log_log4cpp;		// via log4cpp::Category
 		sweetie_bot::LoggerRosout log_rosout;		// via 'rosout' stream using log4cpp::Category
 		sweetie_bot::LoggerRosout log_rosout_ocl;	// via 'rosout' stream using OCL::Logger::Category
+		sweetie_bot::LoggerRTT log_rtt;				// via RTT::log facility
 
+		void testLogger(sweetie_bot::Logger & log, const string& name);
 	public:
 		LoggerTest(std::string const& name);
 

@@ -17,7 +17,7 @@ LoggerOCL::LoggerOCL(const string& category_name) :
 	if (!category) RTT::log(RTT::Error) << "LoggerOCL: category `" << category_name << "' is not OCL::logger::Category. Disable logging." << RTT::endlog();
 }
 
-LoggerOCL::LoggerOCL(OCL::logging::Category * _category) : 
+LoggerOCL::LoggerOCL(log4cpp::Category * _category) : 
 	ocl_category(dynamic_cast<OCL::logging::Category*>(_category))
 {
 	if (category && !ocl_category) RTT::log(RTT::Error) << "LoggerOCL: provided category is not OCL::logger::Category. Disable logging." << RTT::endlog();
@@ -35,7 +35,7 @@ LoggerLog4Cpp::LoggerLog4Cpp(const string& category_name) :
 	}
 }
 
-LoggerLog4Cpp::LoggerLog4Cpp(OCL::logging::Category * _category) : 
+LoggerLog4Cpp::LoggerLog4Cpp(log4cpp::Category * _category) : 
 	Logger(_category)
 {
 	if (dynamic_cast<OCL::logging::Category*>(category)) {
@@ -95,6 +95,50 @@ void LoggerRosout::flush() {
 			// prevent simultenios write attempts
 			rosout_port.write(rosout_msg);
 		}
+	}
+	this->clear();
+}
+
+//// LOGGER RTT /////
+
+LoggerRTT::LoggerRTT(const string& category_name) : 
+	Logger(category_name)
+{
+	if (!category) {
+		RTT::log(RTT::Error) << "LoggerRTT: category '" << category_name << "' inaccessible." << RTT::endlog();
+	}
+}
+
+void LoggerRTT::flush() {
+	oss << std::ends;
+	if (category) {
+		RTT::LoggerLevel level = RTT::Never;
+		switch (priority) {
+			case log4cpp::Priority::FATAL: //less value
+				level = RTT::Fatal;
+				break;
+			case log4cpp::Priority::ALERT:
+			case log4cpp::Priority::CRIT:
+			case log4cpp::Priority::ERROR:
+				level = RTT::Error;
+				break;
+			case log4cpp::Priority::WARN:
+				level = RTT::Warning;
+				break;
+			case log4cpp::Priority::NOTICE:
+			case log4cpp::Priority::INFO:
+				level = RTT::Info;
+				break;
+			case log4cpp::Priority::DEBUG: //greater value
+				level = RTT::Debug;
+				break;
+			default:
+				return;
+		}
+		old_module = RTT::log().getLogModule();
+		RTT::log().in(category->getName());
+		RTT::log(level) << oss.str().c_str() << RTT::endlog(); 
+		RTT::log().out(old_module);
 	}
 	this->clear();
 }

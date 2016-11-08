@@ -22,9 +22,10 @@ Great and Powerfull Loger is hear to fix thoese deficiencies! It has many **tric
 2. `RosAppenderService` which able to forward given `log4cpp` category to `\rosut` (use `addCategory` operation).
 3. `OCL::logging::RosAppender` component which forward log from `OCL::logging` category to `\rosut` (use `OCL::logging::LoggerService` to setup connection).
 4. Logger interface includes:
-     * `LoggerLog4Cpp` --- log directly to specified `log4cpp` category.
-     * `LoggerOCL` --- log to `OCL` category.
-     * `LoggerRos` --- directry log to `\rosout`, for log priority assigment may use `OCL` or `log4cpp` categories.
+     * `LoggerLog4Cpp` logs directly to specified `log4cpp` category.
+     * `LoggerOCL` logs to `OCL` category.
+     * `LoggerRos` directry logs to `\rosout`, for log priority assigment may use `OCL` or `log4cpp` categories.
+     * `LoggerRTT` uses RTT::Logger to display messages.
    Loggers do not rely on dynamic memory allocation and use `RTT::Loger` style syntax:
  
        using sweetie_bot::Logger;

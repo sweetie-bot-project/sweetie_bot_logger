@@ -1,0 +1,75 @@
+# LOGGER DEPLOYMENT SCRIPT
+#
+# Deploy logging forwarding from log4cpp and OCL::logging to rosout
+#
+#
+export void logger_setup(string logger_prop_cpf)
+{
+
+import("rtt_ros")
+ros.import("rtt_rospack");
+ros.import("sweetie_bot_logger");
+
+#
+# CONFIG: OCL::logging::Category --> rosout, logger-ocl.log
+# Works with and without ros and log4cpp deployer support.
+#
+
+var string LOGGR_SCRIPTS = ros.find("sweetie_bot_logger") + "/scripts/";
+# Deploy OCL::logging infrastructure.
+
+# file logging 
+loadComponent("log_ocl_file", "OCL::logging::FileAppender");
+setActivity("log_ocl_file", 0.1, 0, 0);
+log_ocl_file.LayoutName = "pattern";
+log_ocl_file.LayoutPattern = "%d{%H:%M:%S,%l} [%-5p] %-20c - %m%n";
+log_ocl_file.Filename = "logger-ocl.log";
+log_ocl_file.MaxEventsPerCycle = 50;
+
+# rosout logging 
+loadComponent("log_ocl_rosout", "RosAppender");
+setActivity("log_ocl_file", 0.1, 0, 0);
+log_ocl_rosout.MaxEventsPerCycle = 50;
+#
+# cout logging 
+loadComponent("log_ocl_cout", "OCL::logging::OstreamAppender");
+setActivity("log_ocl_cout", 0.1, 0, 0);
+log_ocl_cout.MaxEventsPerCycle = 50;
+log_ocl_cout.LayoutName = "pattern";
+log_ocl_cout.LayoutPattern = "[%-5p] %-20c - %m%n";
+log_ocl_cout.PriorityThreshold = "error";
+ 
+loadComponent("log_ocl", "OCL::logging::LoggingService")
+setActivity("log_ocl", 0.5, 0, 0)
+loadService("log_ocl","marshalling")
+addPeer("log_ocl","log_ocl_file")
+addPeer("log_ocl","log_ocl_rosout")
+addPeer("log_ocl","log_ocl_cout")
+log_ocl.marshalling.loadProperties(LOGGR_SCRIPTS + "log_ocl.cpf")
+
+# start
+log_ocl_file.configure
+log_ocl_rosout.configure
+log_ocl_cout.configure
+log_ocl.configure
+
+log_ocl_file.start
+log_ocl_rosout.start
+log_ocl_cout.start
+log_ocl.start
+
+
+# CONFIG: RTT::Logger --> rosout
+#
+# Forward log from Deployer to rosout.
+# IMPORTANT! Works only for deployer with log4cpp support.
+#
+# Bug! OROCOS does not call ~Service(), so port is connected during RosAppender destruction.
+# Log attempt from ConnectionManger causes deadlock. Currently bug is solved by adding
+# assert (port.disconnected) in  ~RosAppender().
+# 
+
+loadService("Deployer", "rosout");
+rosout.addCategory("org.orocos.rtt", 20); # output Category for RTT::Logger, buffer for 20 messages
+
+}
