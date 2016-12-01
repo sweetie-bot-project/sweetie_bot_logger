@@ -57,7 +57,7 @@ void LoggerTest::updateHook(){
   testLogger(log_rtt, "LOG_RTT");
 }
 
-void LoggerTest::testLogger(sweetie_bot::Logger & log, const string& name) 
+void LoggerTest::testLogger(sweetie_bot::Logger & log, const std::string& name) 
 {
   log(INFO) << "GREAT AND POWERFUL " << name << " begins!" << RTT::endlog();
   

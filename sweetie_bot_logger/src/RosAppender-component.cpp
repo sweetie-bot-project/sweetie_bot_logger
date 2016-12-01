@@ -7,14 +7,13 @@
 
 using namespace RTT;
 
-
 RosAppender::RosAppender(std::string name) :
     OCL::logging::Appender(name),
-    maxEventsPerCycle(1)
+    maxEventsPerCycle(10)
 {
     this->addProperty("MaxEventsPerCycle", maxEventsPerCycle)
 		.doc("Maximum number of log events to pop per cycle.")
-		.set(1);
+		.set(10);
 }
 
 RosAppender::~RosAppender()

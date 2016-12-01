@@ -10,7 +10,7 @@ namespace sweetie_bot
 
 //// LOGGER OCL /////
 
-LoggerOCL::LoggerOCL(const string& category_name) :
+LoggerOCL::LoggerOCL(const std::string& category_name) :
 	ocl_category(dynamic_cast<OCL::logging::Category*>( &log4cpp::Category::getInstance(category_name) )) 
 {
 	category = ocl_category;
@@ -26,7 +26,7 @@ LoggerOCL::LoggerOCL(log4cpp::Category * _category) :
 
 //// LOGGER LOG4CPP /////
 
-LoggerLog4Cpp::LoggerLog4Cpp(const string& category_name) : 
+LoggerLog4Cpp::LoggerLog4Cpp(const std::string& category_name) : 
 	Logger(category_name)
 {
 	if (dynamic_cast<OCL::logging::Category*>(category)) {
@@ -101,7 +101,7 @@ void LoggerRosout::flush() {
 
 //// LOGGER RTT /////
 
-LoggerRTT::LoggerRTT(const string& category_name) : 
+LoggerRTT::LoggerRTT(const std::string& category_name) : 
 	Logger(category_name)
 {
 	if (!category) {
