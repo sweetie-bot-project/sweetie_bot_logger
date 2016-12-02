@@ -55,7 +55,7 @@ class Logger
 			category(0), priority(NOTSET)
 		{}
 
-		Logger(const string& category_name) : 
+		Logger(const std::string& category_name) : 
 			category(&log4cpp::Category::getInstance(category_name)),
 			priority(NOTSET),
 			oss("")
@@ -136,7 +136,7 @@ class LoggerOCL : public Logger
 
 	public:
 		LoggerOCL() : ocl_category(0) {} 
-		LoggerOCL(const string& category_name);
+		LoggerOCL(const std::string& category_name);
 		LoggerOCL(log4cpp::Category * _category);
 
 		virtual void flush() {
@@ -152,7 +152,7 @@ class LoggerLog4Cpp : public Logger
 	public:
 		LoggerLog4Cpp() {} 
 
-		LoggerLog4Cpp(const string& category_name);
+		LoggerLog4Cpp(const std::string& category_name);
 		LoggerLog4Cpp(log4cpp::Category * _category);
 };
 
@@ -167,7 +167,7 @@ class LoggerRosout : public Logger
 	public:
 		LoggerRosout() : rosout_port("rosout") {}
 
-		LoggerRosout(const string& category_name, int buffer_size = 50) : 
+		LoggerRosout(const std::string& category_name, int buffer_size = 50) : 
 			Logger(category_name),
 			rosout_port("rosout")
 		{
@@ -195,10 +195,10 @@ class LoggerRosout : public Logger
 class LoggerRTT : public Logger 
 {
 	protected:
-		string old_module;
+		std::string old_module;
 	public:
 		LoggerRTT() {} 
-		LoggerRTT(const string& category_name);
+		LoggerRTT(const std::string& category_name);
 		LoggerRTT(log4cpp::Category * _category) : Logger(_category) {}
 
 		virtual void flush();
