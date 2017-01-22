@@ -7,6 +7,7 @@
 #include <rtt/Component.hpp>
 #include <rtt/Logger.hpp>
 
+
 using namespace RTT;
 using sweetie_bot::Logger;
 
