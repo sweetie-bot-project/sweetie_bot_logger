@@ -67,21 +67,30 @@ or in lua (see `scripts/logger.lua` helper module and `scripts/test_logger_log4c
     dofile(rttros.find_rospack("sweetie_bot_logger") .. "logger.lua")
     logger.init_loglevels_log4cpp("logging.log4cpp")
 
-Additionally you may want to redirect `RTT::Logger` category `org.orocos.rtt` to `\rosout` (Deployer must be compiled with `log4cpp` support):
-
-    log4cpp.addRosAppender("org.orocos.rtt", 20);
 
 ### Using `LoggerLog4cpp`
 
 Use `log4cpp` configuration file to declare loglevels and appenders. See [log4cpp documentation](http://log4cpp.sourceforge.net) for details.
 Example configuration may be found in `scripts/logger_log4cpp.log4cpp`. 
 
-Also you may add `RosoutAppender` to any category, using `log4cpp` service.
+Also you may add `RosAppender` to any category to redirect messages to `/rosout`.
+
+    log4cpp.addRosAppender("<category_name>", 20);
+
 
 ### Using `LoggerOCL`
 
 Use OCL logging infrastructure deployment procedure as described in OROCOS documentation. 
 See `scripts/test_logger_ocl.ops` as example.
+
+### Redirecting `RTT::Logger` to `/rosout`
+
+If deployer is compiled with log4cpp support you can redirect `RTT::Logger` category `org.orocos.rtt` to `\rosout`:
+
+    log4cpp.addRosAppender("org.orocos.rtt", 20);
+
+But during shutdown deadlock occurs due to logging attempt using appender being destructed.
+Currently this bug is fixed by `assert`. Also you can call `log4cpp.shutdown` explicitly to prevent deadlock.
 
 ### Test scripts:
 

@@ -22,7 +22,8 @@ log4cpp.configure(LOGGER_SCRIPTS + "logger_log4cpp.log4cpp"); # load configurati
 # Log attempt from ConnectionManger causes deadlock. Currently bug is solved by adding
 # assert (port.disconnected) in  ~RosAppender().
 # 
-log4cpp.addRosAppender("org.orocos.rtt", 20); # output Category for RTT::Logger, buffer for 20 messages
+# log4cpp.addRosAppender("org.orocos.rtt", 20); # output Category for RTT::Logger, buffer for 20 messages
+log4cpp.addRosAppender("orocos.log4cpp", 20); # redirect orocos.log4cpp to /rosout
 
 # Run test component
 

@@ -2,10 +2,12 @@
 # categories who's level is NOT explicitly set in this file)
 log4j.rootCategory=ERROR
  
-# orocos setup
+# setup log level for RTT::Logger messages
 log4j.category.org.orocos.rtt=DEBUG
 log4j.additivity.org.orocos.rtt=false   # do not also log to parent categories
 
+# setup log level for different categories
 log4j.category.orocos=ERROR
-log4j.category.orocos.log4cpp=DEBUG
+log4j.category.orocos.logger_test=DEBUG
+log4j.category.orocos.log4cpp=INFO
 log4j.category.orocos.rosout=WARN

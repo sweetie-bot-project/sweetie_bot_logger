@@ -29,7 +29,7 @@ setActivity("log_ocl_cout", 0.1, 0, 0);
 log_ocl_cout.MaxEventsPerCycle = 50;
 log_ocl_cout.LayoutName = "pattern";
 log_ocl_cout.LayoutPattern = "[%-5p] %-20c - %m%n";
-log_ocl_cout.PriorityThreshold = "error";
+#log_ocl_cout.PriorityThreshold = "error";
 
 # logger service component 
 loadComponent("log_ocl", "OCL::logging::LoggingService")

@@ -1,22 +1,30 @@
 # root category logs to application (this level is also the default for all 
 # categories who's level is NOT explicitly set in this file)
-log4j.rootCategory=ERROR
+log4j.rootCategory=ERROR, console
  
-# orocos setup
+# setup log level for RTT::Logger messages
 log4j.category.org.orocos.rtt=DEBUG, deployerAppender
 log4j.additivity.org.orocos.rtt=false   # do not also log to parent categories
 
-log4j.category.orocos=ERROR, componentsAppender
-log4j.category.orocos.log4cpp=DEBUG
+# setup log level for different categories
+log4j.category.orocos=ERROR
+log4j.category.orocos.logger_test=DEBUG
+log4j.category.orocos.log4cpp=INFO, componentsAppender
 log4j.category.orocos.rosout=WARN
 
-# Setup log to file
+# Setup console appender: print message to console
+log4j.appender.console=ConsoleAppender
+log4j.appender.console.threshold=WARN
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d{%H:%M:%S,%l} [%-5p] %-20c - %m%n
+
+# Setup file appender: write to orocos.log
 log4j.appender.deployerAppender=org.apache.log4j.FileAppender
 log4j.appender.deployerAppender.fileName=orocos.log
 log4j.appender.deployerAppender.layout=org.apache.log4j.PatternLayout
 log4j.appender.deployerAppender.layout.ConversionPattern=%d{%H:%M:%S,%l} [%-5p] %-20c - %m%n
-#
-# Setup log to file
+
+# Setup file appender: write to components.log
 log4j.appender.componentsAppender=org.apache.log4j.FileAppender
 log4j.appender.componentsAppender.fileName=components.log
 log4j.appender.componentsAppender.layout=org.apache.log4j.PatternLayout
