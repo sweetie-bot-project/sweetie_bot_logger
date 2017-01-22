@@ -1,22 +1,24 @@
+# 
+# GREAT AND POWERFULL LOGGER test script: LoggerRTT and LoggerRos
 #
-# GREAT AND POWERFULL LOGGER test script
-#
-
-# log4cpp infrastructure depoys via "--rtt-log4cpp-config-file" argument.
 
 import("rtt_ros")
 ros.import("rtt_rospack");
-#loadService("Deployer", "scripting");
+ros.import("sweetie_bot_logger");
 
-var string LOGGER_SCRIPTS = ros.find("sweetie_bot_logger") + "/scripts/"
+var string LOGGER_SCRIPTS = ros.find("sweetie_bot_logger") + "/scripts/";
 
-# OCL::Logging infrastructure
-#scripting.loadPrograms(LOGGER_SCRIPTS + "setup_logging.ops");
-#setup_logging(LOGGER_SCRIPTS + "log_ocl.cpf", "orocos-ocl.log", true);
+# Deploy log4cpp infrastructure using log4cpp service:
+loadService("Deployer", "log4cpp"); # add log4cpp service
+log4cpp.configure(LOGGER_SCRIPTS + "logger.log4cpp"); # load configuration from file
 
-runScript(LOGGER_SCRIPTS + "logger_conf.ops");
+# Or use LoggerService component instead:
+#
+# loadComponent("log_ocl", "OCL::logging::LoggingService")
+# loadService("log_ocl","marshalling")
+# log_ocl.marshalling.loadProperties(LOGGER_SCRIPTS + "logger.cpf")
 
-# Load test component
+# Load and run test component
 
 loadComponent("test", "sweetie_bot::LoggerTest");
 test.start

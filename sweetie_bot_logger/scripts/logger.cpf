@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "cpf.dtd">
+<properties>
+	<struct name="Levels" type="PropertyBag">
+		<simple name="orocos.ocl" type="string"><value>debug</value></simple>
+		<simple name="orocos.ocl.rosout" type="string"><value>info</value></simple>
+		<simple name="sweetie" type="string"><value>error</value></simple>
+		<simple name="sweetie.core.herkulex" type="string"><value>info</value></simple>
+		<simple name="sweetie.core.servo_inv" type="string"><value>info</value></simple>
+		<simple name="sweetie.core.controlers" type="string"><value>info</value></simple>
+	</struct>
+
+	<struct name="Additivity" type="PropertyBag">
+		<description>A PropertyBag defining the additivity of each category of interest.</description>
+		<simple name="sweetie" type="boolean"><value>0</value></simple>
+	</struct>
+
+	<struct name="Appenders" type="PropertyBag">
+	</struct>
+</properties>

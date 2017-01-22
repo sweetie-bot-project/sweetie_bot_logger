@@ -16,11 +16,12 @@ Native OROCOS logging system suffers a few drawbacks:
 3. `log4cpp::Category` is not realtime, deployer does not support `log4cpp` out of box (recompiling is needed).
 4. All logging systems lack ROS integration.
 
-Great and Powerfull Loger is hear to fix thoese deficiencies! It has many **tricks** under its mantle:
+Great and Powerfull Loger is hear to fix thoese deficiencies! It has many **tricks** under its mantle.
 
-1. `log4cpp::RosAppender` for `log4cpp` which forward messages to `\rosout` ROS topic. 
-2. `RosAppenderService` which able to forward given `log4cpp` category to `\rosut` (use `addCategory` operation).
-3. `OCL::logging::RosAppender` component which forward log from `OCL::logging` category to `\rosut` (use `OCL::logging::LoggerService` to setup connection).
+1. `log4cpp::RosAppender` is `log4cpp` appender which forward messages to `\rosout` ROS topic. 
+2. `RosAppenderService` (`rosout` service) is able to forward given `log4cpp` category to `\rosut` (use `addCategory` operation).
+2. `Log4cppService` (`log4cpp` service) allows to initialize `log4cpp` using configuration file.
+3. `OCL::logging::RosAppender` component  forwards log from `OCL::logging` category to `\rosut` (use `OCL::logging::LoggerService` to setup connection).
 4. Logger interface includes:
      * `LoggerLog4Cpp` logs directly to specified `log4cpp` category.
      * `LoggerOCL` logs to `OCL` category.
@@ -29,58 +30,76 @@ Great and Powerfull Loger is hear to fix thoese deficiencies! It has many **tric
    Loggers do not rely on dynamic memory allocation and use `RTT::Loger` style syntax:
  
        using sweetie_bot::Logger;
-       sweetie_bot::LoggerLog4Cpp log("org.orocos.rtt");
+       sweetie_bot::LoggerLog4Cpp log("robot.component");
 
        log(Logger::INFO) << "I'm GREAT and POWERFULL LOGEER!" << Logger::endl;
 
-   Great and Powerfull Logger generously creates categories for you (despite generosity is clearly not its element).
+   Great and Powerfull Logger creates unexisting categories (despite generosity is clearly not its element).
+   But you should set log levels  via `log4cpp` configuration file or using `ocl::logging::LoggerService` component.
+   By default log levels are `UNSET` so no messages are shown.
+
    Log is flushed by `Logger::endl` manipulator, `RTT::Logger` maipulators are also supported. See `LoggerTest` for example.
 
 Usage
 -----
 
-### Deployer with `log4cpp` support
+Your should select the logger facility and declare `log4cpp` categories.
 
-Use `RosAppenderService` to forward `RTT::Logger` messages to `rosout`, create categories with standart log4cpp file.
-You may use all interfaces of Great and Powerfull Logger.
+### Using `LoggerRTT` and `LoggerRos`
 
-Test run:
+Your should configure loglevels using log4cpp configuration file or OCL LoggerService cpf file. 
+See `scripts/logger.log4cpp` and `scripts/logger.cpf` for example.
+This files contains log levels for hierarchical tree of categories see [log4cpp documentation](http://log4cpp.sourceforge.net) for more details.
+
+Then there are three ways to provide deployer with this information:
+
+1. Use `--rtt-log4cpp-config-file` option of `deployer` on startup. (Deployer must be compiled with log4cpp support).
+2. Use `log4cpp` service to load `.log4cpp` file (see `scripts/test_logger.ops` and `scripts/test_logger_log4cpp.lua`).
+3. Use `marshalling` service to load `.cpf` file in `OCL::LoggerService` component.
+
+Basic deployment code looks like: 
+
+    loadService("Deployer", "log4cpp");
+    log4cpp.configure("logger.log4cpp");
+
+or in lua (see `scripts/logger.lua` helper module and `scripts/test_logger_log4cpp.lua` for details):
+
+    dofile(rttros.find_rospack("sweetie_bot_logger") .. "logger.lua")
+    logger.init_loglevels_log4cpp("logging.log4cpp")
+
+Additionally you may want to redirect `RTT::Logger` category `org.orocos.rtt` to `\rosout` (Deployer must be compiled with `log4cpp` support):
+
+    log4cpp.addRosAppender("org.orocos.rtt", 20);
+
+### Using `LoggerLog4cpp`
+
+Use `log4cpp` configuration file to declare loglevels and appenders. See [log4cpp documentation](http://log4cpp.sourceforge.net) for details.
+Example configuration may be found in `scripts/logger_log4cpp.log4cpp`. 
+
+Also you may add `RosoutAppender` to any category, using `log4cpp` service.
+
+### Using `LoggerOCL`
+
+Use OCL logging infrastructure deployment procedure as described in OROCOS documentation. 
+See `scripts/test_logger_ocl.ops` as example.
+
+### Test scripts:
 
 	LOGGER_SCRIPTS=`rospack find sweetie_bot_logger`/scripts
-    deployer --rtt-log4cpp-config-file $LOGGER_SCRIPTS/logging.log4cpp -s $LOGGER_SCRIPTS/test_logger.ops
-	> test.trigger
 
-All logger of `LoggerTest` component should be opertional. See `logger.log4cpp`, `logger.ops`, `log_ocl.cpf` for confuguratin example.
-
-
-### Deployer without `log4cpp` support
-
-Forward `RTT::Logger` to ROS is not possible, Great and Powerfull Logger able to work and in such coditions.
-Create categories with `OCL::logging::LoggingService` and use `LoggerOCL` (with OCL appenders) or `LoggerRosout` (appender is not needed).
-
-**Test run:**
-
-	LOGGER_SCRIPTS=`rospack find sweetie_bot_logger`/scripts
     deployer -s $LOGGER_SCRIPTS/test_logger.ops
-	> test.trigger
-
-
-Two loggers using `log4cpp` categories should fail, `rosout` service also fails.
-
-**Configuration** for OCL + Rosout logging infrastructure (DOES NOT WORKING!). 
-In deployer run:
-
-    scripting.loadPrograms(path_to_logger_scripts + "setup_logging.ops");
-    setup_logging("logger_servie_config.cpf", "file_appender.log", false);
+    deployer -s $LOGGER_SCRIPTS/test_logger_log4cpp.ops
+    rttlua -i $LOGGER_SCRIPTS/test_logger_log4cpp.lua
+    deployer -s $LOGGER_SCRIPTS/test_logger_ocl.ops
 
 
 Known bugs and limitations
 --------------------------
 
-1. `LoggerRosut` uses `Mutex` to prevent concurrent por write.
-2. If output port of `log4cpp:::RosAppender` is connected during desruction Ursa Major is being summomed (deadlock happens). 
-Deadlock is caused by attemt to log via appender being destructed. Currently bug is amended with `assert`.
-3. It seems rosout unable to process connection request fast enoughs. First bunch of messages from LoggerTest is missing on rosout. Just call sleep.
+1. `LoggerRosut` uses `Mutex` to prevent concurrent write.
+2. If output port of `log4cpp:::RosAppender` is connected during object destruction Ursa Major is being summomed (deadlock happens). 
+It is caused by attempt to log via appender being destructed. Currently bug is amended with `assert` but also `log4cpp.shutdown` just before exit.
+3. It seems `\rosout` is unable to process connection requests fast enoughs. First bunch of messages from LoggerTest is missing on `\rosout`. Just call sleep.
 
 
 
