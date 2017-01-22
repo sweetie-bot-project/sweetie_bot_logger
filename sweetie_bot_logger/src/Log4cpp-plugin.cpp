@@ -31,20 +31,29 @@ public:
 			.arg("category_name", "Category name");
 	}
 
+	log4cpp::Appender * getRosAppender(log4cpp::Category * category) 
+	{
+		if (!category) return 0;
+		log4cpp::AppenderSet appenders = category->getAllAppenders();	
+		for(log4cpp::AppenderSet::iterator i = appenders.begin(); i != appenders.end(); i++) {
+			if (dynamic_cast<log4cpp::RosAppender *>(*i)) return *i;
+		}
+		return 0;
+	}
+
 	bool addRosAppender(const std::string& category_name, int buffer_size) 
 	{
-		RTT::Logger::In in("RosAppenderService");
+		RTT::Logger::In in("Log4cppService");
 		log4cpp::Category * category = log4cpp::Category::exists(category_name);
 		if (!category) {
 			RTT::log(Error) << "Category '" << category_name << "' does not exist." << RTT::endlog();
 			return false;
 		}
 		if (dynamic_cast<OCL::logging::Category*>(category)) {
-			RTT::log(Error) << "Category '" << category_name << "' is actually OCL::logging::Category. Use RosAppender component to forward it to rosout." << RTT::endlog();
-			return false;
+			RTT::log(Warning) << "Category '" << category_name << "' is actually OCL::logging::Category. Use RosAppender component to forward it to rosout." << RTT::endlog();
 		}
-		if (category->getAppender("rosout")) {
-			RTT::log(Warning) << "Appender rosout already present at category '" << category_name << "'." << RTT::endlog();
+		if (getRosAppender(category)) {
+			RTT::log(Warning) << "RosAppender is already attached to category '" << category_name << "'." << RTT::endlog();
 			return true;
 		}
 		try {
@@ -54,30 +63,26 @@ public:
 			RTT::log(Error) << "addAppender: " << e.what() << RTT::endlog();
 			return false;
 		}
-		RTT::log(Info) << "Rosout appender is attached to '" << category_name << "' category." << RTT::endlog();
+		RTT::log(Info) << "RosAppender is attached to '" << category_name << "' category." << RTT::endlog();
 		return true;
 	}
 
 	bool removeRosAppender(const std::string& category_name) 
 	{
-		Logger::In in("RosAppenderService");
+		Logger::In in("Log4cppService");
 		log4cpp::Category * category = log4cpp::Category::exists(category_name);
 		if (!category) {
 			RTT::log(Error) << "Category '" << category_name << "' does not exist." << RTT::endlog();
 			return false;
 		}
-		if (dynamic_cast<OCL::logging::Category*>(category)) {
-			RTT::log(Error) << "Category '" << category_name << "' is actually OCL::logging::Category. Use RosAppender component to forward it to rosout." << RTT::endlog();
-			return false;
-		}
-		log4cpp::Appender * appender = category->getAppender("rosout");
+		log4cpp::Appender * appender = getRosAppender(category);
 		if (! appender ) {
-			RTT::log(Warning) << "Appender rosout does not present at category '" << category_name << "'." << RTT::endlog();
+			RTT::log(Warning) << "RosAppender does not present at category '" << category_name << "'." << RTT::endlog();
 			return false;
 		}
 		appender->close();
 		category->removeAppender(appender);
-		RTT::log(Info) << "Rosout appender is removed from '" << category_name << "' category." << RTT::endlog();
+		RTT::log(Info) << "RosAppender is removed from '" << category_name << "' category." << RTT::endlog();
 		return true;
 	}
 
@@ -97,14 +102,14 @@ public:
 
 	void closeRosAppenders() 
 	{
-		Logger::In in("RosAppenderService");
+		Logger::In in("Log4cppService");
 		RTT::log(Info) << "Close rosout connection ports." << RTT::endlog();
 		// Close port before removing appender from all Categories.
 		// Otherwise RTT::logger may try to log using appender during destruction. Due to fix in RosAppender this code is unnecessary.
 		std::vector<log4cpp::Category*> * categories = log4cpp::Category::getCurrentCategories();
 		for(std::vector<log4cpp::Category*>::iterator c = categories->begin(); c != categories->end(); c++) {
-			log4cpp::Appender * appender = (*c)->getAppender("rosout");
-			if (appender) { 
+			log4cpp::Appender * appender = getRosAppender(*c);
+			if (appender && (*c)->ownsAppender(appender)) { 
 				appender->close();
 			}
 		}
