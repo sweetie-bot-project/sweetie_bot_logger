@@ -29,6 +29,13 @@ public:
 		this->addOperation("removeRosAppender", &Log4cppService::removeRosAppender, this)
 			.doc("Remove \\rosout appender from the category.")
 			.arg("category_name", "Category name");
+		this->addOperation("setPriority", &Log4cppService::setPriority, this)
+			.doc("Set category priority. Use FATAL, ALERT, CRIT, ERROR, WARN, NOTICE, INFO, DEBUG, NOTSET value levels.")
+			.arg("category_name", "Category name")
+			.arg("priority", "log4cpp priority.");
+		this->addOperation("getPriority", &Log4cppService::getPriority, this)
+			.doc("Return category priority.")
+			.arg("category_name", "Category name");
 	}
 
 	log4cpp::Appender * getRosAppender(log4cpp::Category * category) 
@@ -97,6 +104,35 @@ public:
 			return false;
 		}
 		return true;
+	}
+
+	bool setPriority(const std::string& category_name, const std::string& level) 
+	{
+		RTT::Logger::In in("Log4cppService");
+		log4cpp::Category * category = log4cpp::Category::exists(category_name);
+		if (!category) {
+			RTT::log(Error) << "Category '" << category_name << "' does not exist." << RTT::endlog();
+			return false;
+		}
+		try {
+			category->setPriority(log4cpp::Priority::getPriorityValue(level));
+		}
+		catch (std::invalid_argument& e) {
+			RTT::log(Error) << "setPriority: unknown priority level: " << e.what() << endlog();
+			return false;
+		}
+		return true;
+	}
+
+	std::string getPriority(const std::string& category_name) 
+	{
+		RTT::Logger::In in("Log4cppService");
+		log4cpp::Category * category = log4cpp::Category::exists(category_name);
+		if (!category) {
+			RTT::log(Error) << "Category '" << category_name << "' does not exist." << RTT::endlog();
+			return "";
+		}
+		return log4cpp::Priority::getPriorityName(category->getPriority());
 	}
 
 	void closeRosAppenders() 
