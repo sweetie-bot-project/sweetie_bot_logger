@@ -14,7 +14,6 @@
   <build_depend>rtt</build_depend>
   <build_depend>orogen</build_depend>
   <build_depend>ocl</build_depend>
-  <build_depend>log4cpp</build_depend>
   <build_depend>orocos-log4cpp</build_depend>
   <build_depend>catkin</build_depend>
   <build_depend>rtt_rosgraph_msgs</build_depend>
@@ -22,7 +21,6 @@
 
   <run_depend>rtt</run_depend>
   <run_depend>ocl</run_depend>
-  <run_depend>log4cpp</run_depend>
   <run_depend>orocos-log4cpp</run_depend>
   <run_depend>rtt_rosgraph_msgs</run_depend>
   <run_depend>rtt_roscomm</run_depend>

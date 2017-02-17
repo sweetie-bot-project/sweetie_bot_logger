@@ -22,7 +22,6 @@ include( ${OROCOS-RTT_USE_FILE_PATH}/UseOROCOS-RTT.cmake )
 find_package(catkin REQUIRED)
 include_directories(include)
 
-orocos_use_package(log4cpp)
 orocos_use_package(orocos-log4cpp)
 orocos_use_package(ocl-logging)
 
@@ -41,4 +40,4 @@ add_subdirectory( src )
 # that it can pick up all above settings.
 #
 catkin_package(INCLUDE_DIRS include) # transmit information about includes downstream.
-orocos_generate_package(DEPENDS log4cpp orocos-log4cpp DEPENDS_TARGETS ocl-logging)
+orocos_generate_package(DEPENDS orocos-log4cpp DEPENDS_TARGETS ocl-logging)
