@@ -137,9 +137,9 @@ public:
 
 	void closeRosAppenders() 
 	{
-		RTT::Logger::In in("Log4cppService");
+		//RTT::Logger::In in("Log4cppService");
 
-		RTT::log(Info) << "Close rosout connection ports." << RTT::endlog();
+		//RTT::log(Info) << "Close rosout connection ports." << RTT::endlog();
 		// Close port before removing appender from all Categories.
 		// Otherwise RTT::logger may try to log using appender during destruction. Due to fix in RosAppender this code is unnecessary.
 		std::vector<log4cpp::Category*> * categories = log4cpp::Category::getCurrentCategories();
