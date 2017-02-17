@@ -16,7 +16,10 @@ ros:import("sweetie_bot_logger")
 logger = {}
 
 -- Fast access to log4cpp Service
-logger.log4cpp = depl:providers("log4cpp")
+rtt.provides():require("log4cpp")
+logger.log4cpp = rtt.provides("log4cpp")
+--depl:loadService("Deployer", "log4cpp")
+--logger.log4cpp = depl:provides("log4cpp")
 
 -- Init categories log levels using ocl::logging::LoggerService component.
 -- Set log levels and additivity using corresponding properties in .cpf file.
@@ -33,13 +36,11 @@ end
 -- Init categories log levels using log4cpp configureation file.
 -- Full log4cpp configuration infrastructure can be deployed.
 function logger.init_loglevels_log4cpp(log4cpp_file)
-	depl:loadService("Deployer", "log4cpp")
-	return depl:provides("log4cpp"):configure(log4cpp_file)
+	return logger.log4cpp:configure(log4cpp_file)
 end
 
 -- Redirect RTT log to \rosout
 function logger.redirect_rttlog_to_rosout()
-	depl:loadService("Deployer", "log4cpp")
 	-- output Category for RTT::Logger, buffer for 20 messages
 	logger.log4cpp:addRosAppender("org.orocos.rtt", 20); 
 end

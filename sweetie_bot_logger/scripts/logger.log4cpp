@@ -1,13 +1,11 @@
 # root category logs to application (this level is also the default for all 
 # categories who's level is NOT explicitly set in this file)
-log4j.rootCategory=ERROR
+log4j.rootCategory=WARN
  
 # setup log level for RTT::Logger messages
-log4j.category.org.orocos.rtt=DEBUG
+log4j.category.org.orocos.rtt=INFO
 log4j.additivity.org.orocos.rtt=false   # do not also log to parent categories
 
 # setup log level for different categories
-log4j.category.orocos=ERROR
-log4j.category.orocos.logger_test=DEBUG
-log4j.category.orocos.log4cpp=INFO
-log4j.category.orocos.rosout=WARN
+log4j.category.sweetie.resource_control=INFO
+log4j.category.sweetie.motion=INFO
