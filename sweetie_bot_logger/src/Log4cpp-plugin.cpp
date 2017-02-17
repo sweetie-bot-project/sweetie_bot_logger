@@ -17,16 +17,16 @@ public:
 		Service("log4cpp", tc)
 	{
 		doc("Basic log4cpp functionality.");
-		this->addOperation("configure", &Log4cppService::configure, this, RTT::OwnThread)
+		this->addOperation("configure", &Log4cppService::configure, this)
 			.doc("Init log4cpp using configuration file.")
 			.arg("filename", "log4cpp configuration file"); 	
-		this->addOperation("shutdown", &Log4cppService::shutdown, this, RTT::OwnThread)
+		this->addOperation("shutdown", &Log4cppService::shutdown, this)
 			.doc("Remove all appenders from all categories.");
-		this->addOperation("addRosAppender", &Log4cppService::addRosAppender, this, RTT::OwnThread)
+		this->addOperation("addRosAppender", &Log4cppService::addRosAppender, this)
 			.doc("Add \\rosout appender to the category.")
 			.arg("category_name", "Category name")
 			.arg("buffer_size", "Message buffer size");
-		this->addOperation("removeRosAppender", &Log4cppService::removeRosAppender, this, RTT::OwnThread)
+		this->addOperation("removeRosAppender", &Log4cppService::removeRosAppender, this)
 			.doc("Remove \\rosout appender from the category.")
 			.arg("category_name", "Category name");
 	}
@@ -69,7 +69,7 @@ public:
 
 	bool removeRosAppender(const std::string& category_name) 
 	{
-		Logger::In in("Log4cppService");
+		RTT::Logger::In in("Log4cppService");
 		log4cpp::Category * category = log4cpp::Category::exists(category_name);
 		if (!category) {
 			RTT::log(Error) << "Category '" << category_name << "' does not exist." << RTT::endlog();
@@ -86,10 +86,9 @@ public:
 		return true;
 	}
 
-
 	bool configure(const std::string& filename) 
 	{
-		Logger::In in("Log4cppService");
+		RTT::Logger::In in("Log4cppService");
 		try {
 			log4cpp::PropertyConfigurator::configure(filename);
 		}
@@ -102,7 +101,8 @@ public:
 
 	void closeRosAppenders() 
 	{
-		Logger::In in("Log4cppService");
+		RTT::Logger::In in("Log4cppService");
+
 		RTT::log(Info) << "Close rosout connection ports." << RTT::endlog();
 		// Close port before removing appender from all Categories.
 		// Otherwise RTT::logger may try to log using appender during destruction. Due to fix in RosAppender this code is unnecessary.
