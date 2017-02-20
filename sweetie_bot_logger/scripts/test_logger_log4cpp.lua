@@ -11,7 +11,8 @@ logger_scripts = rttros.find_rospack("sweetie_bot_logger") .. "/scripts/"
 dofile(logger_scripts .. "logger.lua")
 
 -- Init loglevels
-logger.init_loglevels_log4cpp(logger_scripts .. "logging.log4cpp")
+logger.init_loglevels_log4cpp(logger_scripts .. "logger_log4cpp.log4cpp")
+-- logger.set_root_category("orocos")
 -- Alternatively:
 -- logger.init_loglevels_cpf(logger_scripts .. "logging.cpf")
 
@@ -23,8 +24,9 @@ logger.init_loglevels_log4cpp(logger_scripts .. "logging.log4cpp")
 -- assert (port.disconnected) in  ~RosAppender().
 -- 
 logger.log4cpp:addRosAppender("org.orocos.rtt", 20) -- output Category for RTT::Logger, buffer for 20 messages
+logger.log4cpp:addRosAppender("orocos.rosout", 20) -- output Category for RTT::Logger, buffer for 20 messages
 
 -- Load and start test component
 depl:loadComponent("test", "sweetie_bot::LoggerTest")
 test = depl:getPeer("test")
-test.start()
+test:start()

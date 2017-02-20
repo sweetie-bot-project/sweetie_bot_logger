@@ -4,7 +4,8 @@
 	<struct name="Levels" type="PropertyBag">
 		<simple name="orocos.ocl" type="string"><value>debug</value></simple>
 		<simple name="orocos.ocl.rosout" type="string"><value>info</value></simple>
-		<simple name="sweetie" type="string"><value>error</value></simple>
+		<simple name="sweetie" type="string"><value>warn</value></simple>
+		<simple name="sweetie_bot" type="string"><value>warn</value></simple>
 		<simple name="sweetie.core.herkulex" type="string"><value>info</value></simple>
 		<simple name="sweetie.core.servo_inv" type="string"><value>info</value></simple>
 		<simple name="sweetie.core.controlers" type="string"><value>info</value></simple>

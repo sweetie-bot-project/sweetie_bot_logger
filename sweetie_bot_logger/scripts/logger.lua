@@ -21,6 +21,11 @@ logger.log4cpp = rtt.provides("log4cpp")
 --depl:loadService("Deployer", "log4cpp")
 --logger.log4cpp = depl:provides("log4cpp")
 
+-- Set deafult root category in log4cpp service.
+function logger.set_root_category(root_category)
+	logger.log4cpp:getProperty("default_root_category"):set(root_category)
+end
+
 -- Init categories log levels using ocl::logging::LoggerService component.
 -- Set log levels and additivity using corresponding properties in .cpf file.
 function logger.init_loglevels_cpf(cpf_file)

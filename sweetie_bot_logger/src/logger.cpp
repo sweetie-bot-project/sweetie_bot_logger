@@ -1,12 +1,26 @@
 #include <sweetie_bot_logger/logger.hpp>
 
 #include <rtt/os/MutexLock.hpp>
+#include <rtt/internal/GlobalService.hpp>
 
 #include <orocos/rosgraph_msgs/typekit/Log.h>
 #include <orocos/rtt_roscomm/rtt_rostopic.h>
 
 namespace sweetie_bot 
 {
+
+namespace logger
+{
+
+std::string getDefaultCategory(const std::string& default_category)
+{
+	RTT::Service * log4cpp = RTT::internal::GlobalService::Instance()->provides("log4cpp").get();
+	if (log4cpp) {
+		RTT::Property<std::string> prop = log4cpp->getProperty("default_root_category");
+		if (prop.ready() && prop.get() != "NOTSET") return prop.get();
+	}
+	return default_category;
+}
 
 //// LOGGER OCL /////
 
@@ -143,4 +157,5 @@ void LoggerRTT::flush() {
 	this->clear();
 }
 
-}
+} // namespace logger
+} // namespace sweetie_bot

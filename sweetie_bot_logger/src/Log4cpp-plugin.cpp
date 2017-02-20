@@ -12,6 +12,10 @@ using namespace RTT;
 
 class Log4cppService : public RTT::Service
 {
+protected:
+	// Properties
+	std::string default_category;
+
 public:
 	Log4cppService(RTT::TaskContext* tc) :
 		Service("log4cpp", tc)
@@ -36,6 +40,10 @@ public:
 		this->addOperation("getPriority", &Log4cppService::getPriority, this)
 			.doc("Return category priority.")
 			.arg("category_name", "Category name");
+
+		this->addProperty("default_root_category", default_category)
+			.doc("Default root logging category. Use 'logger::getDefaultCategory' to get it from C++ code. 'NOTSET' value is ignored. ")
+			.set("NOTSET");
 	}
 
 	log4cpp::Appender * getRosAppender(log4cpp::Category * category) 

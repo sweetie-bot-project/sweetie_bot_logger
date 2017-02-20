@@ -12,6 +12,9 @@
 
 namespace sweetie_bot {
 
+/**
+ * @brief Log4cpp logger priorities.
+ **/
 enum LoggerPriority {
 	NOTSET = log4cpp::Priority::NOTSET,
 	DEBUG = log4cpp::Priority::DEBUG,
@@ -29,7 +32,12 @@ std::ostream& resetfmt(std::ostream& s) {
 	return s;
 }
 
+namespace logger {
 
+/**
+ * @brief Logger base virtual class.
+ * Provides basic logger functionality.
+ **/
 class Logger
 {
 	public:
@@ -129,6 +137,11 @@ class Logger
 		}
 };
 
+/**
+ * @brief OCL log4cpp logger.
+ * Messages are feedforwarded throught OROCOS port to OCL::logger::Appender components.
+ * OCL::logger::LoggerService component is necesssary to deploy logging infrastructure.
+ **/
 class LoggerOCL : public Logger 
 {
 	protected:
@@ -146,7 +159,10 @@ class LoggerOCL : public Logger
 		}
 };
 
-
+/**
+ * @brief Plain log4cpp logger.
+ * Use log4cpp facilities to produce log.
+ **/
 class LoggerLog4Cpp : public Logger 
 {
 	public:
@@ -156,7 +172,10 @@ class LoggerLog4Cpp : public Logger
 		LoggerLog4Cpp(log4cpp::Category * _category);
 };
 
-
+/**
+ * @brief Log to /rosuot directly.
+ * Feedforward log message to /rosout. 
+ **/
 class LoggerRosout : public Logger
 {
 	protected:
@@ -190,8 +209,10 @@ class LoggerRosout : public Logger
 		virtual void flush();
 };
 
-//// LOGGER RTT /////
-
+/**
+ * @brief Log via RTT::Logger.
+ * Log via RTT::Logger. Log4cpp category priorities still are applied, so log level can be confugured per component.
+ **/
 class LoggerRTT : public Logger 
 {
 	protected:
@@ -204,6 +225,17 @@ class LoggerRTT : public Logger
 		virtual void flush();
 };
 
-}
+//// Helper functions
+
+/**
+ * @brief Get category from log4cpp Service property.
+ * Return default_category property of log4cpp service. It is assumed the service is loaded into GlobalService.
+ * @param default_category Default category if log4cpp service does not presents.
+ * @return Category name.
+ **/
+std::string getDefaultCategory(const std::string& default_category = "");
+
+} // namespace logger
+} // namespace 
 
 #endif

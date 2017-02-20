@@ -9,17 +9,17 @@
 
 
 using namespace RTT;
-using sweetie_bot::Logger;
 
 namespace sweetie_bot {
+using logger::Logger;
 
 LoggerTest::LoggerTest(std::string const& name) :
 	TaskContext(name, Stopped),
-	log_ocl("orocos.ocl"),
-	log_log4cpp("orocos.log4cpp"),
-	log_rosout("orocos.rosout", 20),
-	log_rosout_ocl("orocos.ocl.rosout", 20),
-	log_rtt("orocos.logger_test")
+	log_ocl(logger::getDefaultCategory("orocos") + ".ocl"),
+	log_log4cpp(logger::getDefaultCategory("orocos") + ".log4cpp"),
+	log_rosout(logger::getDefaultCategory("orocos") + ".rosout", 20),
+	log_rosout_ocl(logger::getDefaultCategory("orocos") + ".ocl.rosout", 20),
+	log_rtt(logger::getDefaultCategory("orocos") + ".logger_test")
 {
 	RTT::Logger::In in("LoggetTest");
 	//  Loggers state check is mandatory. Constructor reports about error via RTT::Logger.
@@ -58,7 +58,7 @@ void LoggerTest::updateHook(){
   testLogger(log_rtt, "LOG_RTT");
 }
 
-void LoggerTest::testLogger(sweetie_bot::Logger & log, const std::string& name) 
+void LoggerTest::testLogger(sweetie_bot::logger::Logger & log, const std::string& name) 
 {
   log(INFO) << "GREAT AND POWERFUL " << name << " begins!" << RTT::endlog();
   

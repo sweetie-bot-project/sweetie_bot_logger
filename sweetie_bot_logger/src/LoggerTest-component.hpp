@@ -9,13 +9,13 @@ namespace sweetie_bot {
 
 class LoggerTest : public RTT::TaskContext{
 	protected:
-		sweetie_bot::LoggerOCL log_ocl;				// via OCL::logger::Category
-		sweetie_bot::LoggerLog4Cpp log_log4cpp;		// via log4cpp::Category
-		sweetie_bot::LoggerRosout log_rosout;		// via 'rosout' stream using log4cpp::Category
-		sweetie_bot::LoggerRosout log_rosout_ocl;	// via 'rosout' stream using OCL::Logger::Category
-		sweetie_bot::LoggerRTT log_rtt;				// via RTT::log facility
+		logger::LoggerOCL log_ocl;				// via OCL::logger::Category
+		logger::LoggerLog4Cpp log_log4cpp;		// via log4cpp::Category
+		logger::LoggerRosout log_rosout;		// via 'rosout' stream using log4cpp::Category
+		logger::LoggerRosout log_rosout_ocl;	// via 'rosout' stream using OCL::Logger::Category
+		logger::LoggerRTT log_rtt;				// via RTT::log facility
 
-		void testLogger(sweetie_bot::Logger & log, const std::string& name);
+		void testLogger(sweetie_bot::logger::Logger & log, const std::string& name);
 	public:
 		LoggerTest(std::string const& name);
 
