@@ -25,13 +25,6 @@ enum LoggerPriority {
 	FATAL = log4cpp::Priority::FATAL,
 };
 
-//TODO Where should be this code?
-//Convinence macro fo logging.
-std::ostream& resetfmt(std::ostream& s) {
-	s.copyfmt(std::ios(NULL)); 
-	return s;
-}
-
 namespace logger {
 
 /**
