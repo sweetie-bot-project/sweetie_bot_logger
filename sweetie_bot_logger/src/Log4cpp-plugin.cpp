@@ -6,6 +6,7 @@
 #include <orocos/ocl/Category.hpp>
 #include <log4cpp/PropertyConfigurator.hh>
 
+#include <sweetie_bot_logger/logger.hpp>
 #include <sweetie_bot_logger/RosAppender.hpp>
 
 using namespace RTT;
@@ -40,10 +41,27 @@ public:
 		this->addOperation("getPriority", &Log4cppService::getPriority, this)
 			.doc("Return category priority.")
 			.arg("category_name", "Category name");
+		this->addOperation("categoryFromComponentName", &Log4cppService::categoryFromComponentName, this)
+			.doc("Construct logging category from component name according to sweetie_bot naming conventions using default_root_category as prefix.")
+			.arg("component_name", "Component name, slashes are replaced by dots.");
+		this->addOperation("getDefaultCategory", &Log4cppService::getDefaultCategory, this)
+			.doc("Retern default_root_category property or default_category if it is equal to\"NOTSET\".")
+			.arg("default_category", "Default category name if default_root_category property is not set.");
 
 		this->addProperty("default_root_category", default_category)
 			.doc("Default root logging category. Use 'logger::getDefaultCategory' to get it from C++ code. 'NOTSET' value is ignored. ")
 			.set("NOTSET");
+	}
+
+	string getDefaultCategory(const string& _default_category) 
+	{
+		if (this->default_category == "NOTSET") return _default_category;
+		else return this->default_category;
+	}
+
+	string categoryFromComponentName(const string& component_name)
+	{
+		return sweetie_bot::logger::categoryFromComponentName(component_name, getDefaultCategory(""));
 	}
 
 	log4cpp::Appender * getRosAppender(log4cpp::Category * category) 

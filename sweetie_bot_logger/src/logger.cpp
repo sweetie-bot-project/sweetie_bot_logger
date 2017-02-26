@@ -22,6 +22,24 @@ std::string getDefaultCategory(const std::string& default_category)
 	return default_category;
 }
 
+std::string categoryFromComponentName(const std::string& component_name) 
+{
+	return categoryFromComponentName(component_name, getDefaultCategory());
+}
+
+std::string categoryFromComponentName(const std::string& component_name, const std::string& root_category)
+{
+	std::string category;
+	if (!root_category.empty())  { 
+		category = root_category + "." + component_name;
+	}
+	else {
+		category = component_name;
+	}
+	std::replace( category.rbegin(), category.rbegin() + component_name.size(), '/', '.');
+	return category;
+}
+
 //// LOGGER OCL /////
 
 LoggerOCL::LoggerOCL(const std::string& category_name) :

@@ -228,6 +228,24 @@ class LoggerRTT : public Logger
  **/
 std::string getDefaultCategory(const std::string& default_category = "");
 
+/**
+ * @brief Construct logging category from component name according to sweetie_bot naming conventions.
+ * Replace in component name slashes with dots and prepend default_category from log4cpp service.  It is assumed the service is loaded into GlobalService.
+ * @param component_name Component name.
+ * @return Category name.
+ **/
+std::string categoryFromComponentName(const std::string& component_name);
+
+
+/**
+ * @brief Construct default logging category from component name.
+ * Replace in component name slashes with dots and prepend it with @a category.
+ * @param component_name Component name.
+ * @param root_category User supplied root category.
+ * @return Category name.
+ **/
+std::string categoryFromComponentName(const std::string& component_name, const std::string& root_category);
+
 } // namespace logger
 } // namespace 
 

@@ -9,5 +9,5 @@ orocos_component(logger_test_component LoggerTest-component.hpp LoggerTest-compo
 target_link_libraries(logger_test_component logger)
 
 orocos_service(log4cpp_service Log4cpp-plugin.cpp) # ...you may add multiple source files
-target_link_libraries(log4cpp_service ros_appender)
+target_link_libraries(log4cpp_service ros_appender logger)
 

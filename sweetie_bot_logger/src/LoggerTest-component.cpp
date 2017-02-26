@@ -16,10 +16,10 @@ using logger::Logger;
 LoggerTest::LoggerTest(std::string const& name) :
 	TaskContext(name, Stopped),
 	log_ocl(logger::getDefaultCategory("orocos") + ".ocl"),
-	log_log4cpp(logger::getDefaultCategory("orocos") + ".log4cpp"),
-	log_rosout(logger::getDefaultCategory("orocos") + ".rosout", 20),
-	log_rosout_ocl(logger::getDefaultCategory("orocos") + ".ocl.rosout", 20),
-	log_rtt(logger::getDefaultCategory("orocos") + ".logger_test")
+	log_log4cpp(logger::getDefaultCategory("orocos") + ".log4cpp"), // orocos.log4cpp
+	log_rosout(logger::getDefaultCategory("orocos") + ".rosout", 20), // orocos.rosout
+	log_rosout_ocl(logger::categoryFromComponentName("ocl/rosout"), 20), // orocos.ocl.rosout
+	log_rtt(logger::categoryFromComponentName("logger_test", "orocos")) // orocos.loger_test
 {
 	RTT::Logger::In in("LoggetTest");
 	//  Loggers state check is mandatory. Constructor reports about error via RTT::Logger.

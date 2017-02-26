@@ -10,7 +10,8 @@ var string LOGGER_SCRIPTS = ros.find("sweetie_bot_logger") + "/scripts/";
 
 # Deploy log4cpp infrastructure.
 
-loadService("Deployer", "log4cpp"); # add log4cpp service
+require("log4cpp"); # add log4cpp service
+log4cpp.default_root_category = "orocos";
 log4cpp.configure(LOGGER_SCRIPTS + "logger_log4cpp.log4cpp"); # load configuration from file
 
 # CONFIG: RTT::Logger --> rosout
