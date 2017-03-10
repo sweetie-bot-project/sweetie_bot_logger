@@ -41,6 +41,8 @@ public:
 		this->addOperation("getPriority", &Log4cppService::getPriority, this)
 			.doc("Return category priority.")
 			.arg("category_name", "Category name");
+		this->addOperation("printAllCategories", &Log4cppService::printAllCategories, this)
+			.doc("Print all category names and priorities.");
 		this->addOperation("categoryFromComponentName", &Log4cppService::categoryFromComponentName, this)
 			.doc("Construct logging category from component name according to sweetie_bot naming conventions using default_root_category as prefix.")
 			.arg("component_name", "Component name, slashes are replaced by dots.");
@@ -161,6 +163,17 @@ public:
 		return log4cpp::Priority::getPriorityName(category->getPriority());
 	}
 
+	void printAllCategories() 
+	{
+		std::vector<log4cpp::Category*> * categories = log4cpp::Category::getCurrentCategories();
+		for(std::vector<log4cpp::Category*>::iterator c = categories->begin(); c != categories->end(); c++) {
+			std::cout << (*c)->getName() << ":  " << log4cpp::Priority::getPriorityName((*c)->getPriority());
+			if (dynamic_cast<OCL::logging::Category*>(*c)) std::cout << " (OCL Category)";
+			std::cout << std::endl;
+		}
+		delete categories;
+	}
+
 	void closeRosAppenders() 
 	{
 		//RTT::Logger::In in("Log4cppService");
@@ -175,6 +188,7 @@ public:
 				appender->close();
 			}
 		}
+		delete categories;
 	}
 
 	void shutdown() 
