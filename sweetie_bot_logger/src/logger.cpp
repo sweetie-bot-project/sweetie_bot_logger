@@ -78,6 +78,20 @@ LoggerLog4Cpp::LoggerLog4Cpp(log4cpp::Category * _category) :
 
 //// LOGGER ROSOUT /////
 
+LoggerRosout::LoggerRosout(const std::string& category_name, int buffer_size) : 
+	Logger(category_name),
+	rosout_port("rosout")
+{
+	this->reopenStream(buffer_size);
+}
+
+LoggerRosout::LoggerRosout(log4cpp::Category * _category, int buffer_size) : 
+	Logger(_category),
+	rosout_port("rosout")
+{
+	this->reopenStream(buffer_size);
+}
+
 bool LoggerRosout::reopenStream(int buffer_size) 
 {
 	if(rosout_port.connected()) rosout_port.disconnect();

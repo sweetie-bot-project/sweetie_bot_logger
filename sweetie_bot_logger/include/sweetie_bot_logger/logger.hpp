@@ -179,19 +179,8 @@ class LoggerRosout : public Logger
 	public:
 		LoggerRosout() : rosout_port("rosout") {}
 
-		LoggerRosout(const std::string& category_name, int buffer_size = 50) : 
-			Logger(category_name),
-			rosout_port("rosout")
-		{
-			this->reopenStream(buffer_size);
-		}
-
-		LoggerRosout(log4cpp::Category * _category, int buffer_size = 50) : 
-			Logger(_category),
-			rosout_port("rosout")
-		{
-			this->reopenStream(buffer_size);
-		}
+		LoggerRosout(const std::string& category_name, int buffer_size = 50);
+		LoggerRosout(log4cpp::Category * _category, int buffer_size = 50);
 
 		bool reopenStream(int buffer_size);
 

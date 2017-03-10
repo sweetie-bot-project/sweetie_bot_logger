@@ -67,7 +67,7 @@ namespace log4cpp {
 
 	RosAppender::~RosAppender() {
 		// prevent deadlock due to logging attempt
-		assert( ! rosout_port.connected() ); // RosAppender: deadlock othervise
+		assert( ! rosout_port.connected() ); // RosAppender: deadlock otherwise if we are logging to rtt.orocos
 	}
 }
 
