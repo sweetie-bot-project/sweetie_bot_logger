@@ -43,3 +43,9 @@ add_subdirectory( src )
 # that it can pick up all above settings.
 #
 orocos_generate_package()
+#catkin_package(INCLUDE_DIRS include) # transmit information about includes downstream.
+#orocos_generate_package(DEPENDS orocos-log4cpp DEPENDS_TARGETS ocl-logging)
+
+# Scripts installation
+install(DIRECTORY scripts
+	DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
