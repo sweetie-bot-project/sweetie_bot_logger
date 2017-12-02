@@ -4,7 +4,7 @@
 #include <rtt/internal/GlobalService.hpp>
 
 #include <orocos/rosgraph_msgs/typekit/Log.h>
-#include <orocos/rtt_roscomm/rtt_rostopic.h>
+#include <orocos/rtt_roscomm/rostopic.h>
 
 namespace sweetie_bot 
 {

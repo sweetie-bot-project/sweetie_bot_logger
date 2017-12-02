@@ -1,7 +1,7 @@
 #include <sweetie_bot_logger/RosAppender.hpp>
 
 #include <stdexcept>
-#include <orocos/rtt_roscomm/rtt_rostopic.h>
+#include <orocos/rtt_roscomm/rostopic.h>
 
 
 using namespace RTT;
