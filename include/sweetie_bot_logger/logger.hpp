@@ -106,7 +106,9 @@ class Logger
 			return *this;	
 		}
 
-		Logger& operator()(LoggerPriority level) { this->operator()(LogPriority(level)); }
+		Logger& operator()(LoggerPriority level) { 
+			return this->operator()(LogPriority(level)); 
+		}
 
 		template <typename T> Logger& operator<<(const T& t) {
 			if (priority != NOTSET) oss << t;
