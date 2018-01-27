@@ -81,6 +81,7 @@ class Logger
 		void clear() {
 			oss.clear();
 			oss.seekp(0);
+			priority = NOTSET;
 		}
 
 		virtual void flush() {
