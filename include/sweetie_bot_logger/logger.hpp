@@ -8,7 +8,7 @@
 #include <orocos/ocl/Category.hpp>
 #include <orocos/ocl/CategoryStream.hpp>
 
-#include <rosgraph_msgs/Log.h>
+#include <rosgraph_msgs/typekit/Log.h>
 
 namespace sweetie_bot {
 
