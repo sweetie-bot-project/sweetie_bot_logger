@@ -11,6 +11,9 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 # listed in the package.xml file
 include_directories(${USE_OROCOS_INCLUDE_DIRS})
 
+### General dependencies ###
+orocos_use_package(orocos-log4cpp REQUIRED)
+
 ### Orocos Targets ###
 
 #Libraries: only .so modules from root CMakeLists are added to *.pc file.
@@ -30,7 +33,11 @@ install(DIRECTORY scripts
 	DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
 # Export package information (replaces catkin_package() macro)
-orocos_generate_package(INCLUDE_DIRS include DEPENDS rtt_ros)
+orocos_generate_package(
+	INCLUDE_DIRS include 
+	DEPENDS orocos-log4cpp
+	DEPENDS_TARGETS ocl-logging rtt_ros rtt_roscomm rtt_rosgraph_msgs
+)
 
 if (DEFINED _pkgconfig_error)
 if (${_pkgconfig_error})

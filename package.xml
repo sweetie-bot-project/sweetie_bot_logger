@@ -13,7 +13,6 @@
 
   <!-- ROS and OROCOS packages -->
   <depend>rtt</depend>
-  <depend>ocl</depend>
   <depend>ocl-logging</depend>
   <depend>orocos-log4cpp</depend>
   <!-- ROS and OROCOS datatypes -->
