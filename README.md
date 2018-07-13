@@ -1,4 +1,4 @@
-Great and Powerfull Logger
+Great and Powerful Logger
 --------------------------
 
 Great and Powerfull Logger is part of [Sweetie Bot](http://sweetiebot.net) project. 
