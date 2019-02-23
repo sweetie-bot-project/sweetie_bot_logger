@@ -4,7 +4,7 @@ project(sweetie_bot_logger)
 ### ROS dependicies ###
 # Find the RTT-ROS package (this transitively includes the Orocos CMake macros)
 find_package(catkin REQUIRED COMPONENTS rtt_ros)
-include_directories(include ${catkin_INCLUDE_DIRS})
+include_directories(SYSTEM ${catkin_INCLUDE_DIRS})
 
 ### Orocos Dependencies ###
 # Note that orocos_use_package() does not need to be called for any dependency
@@ -14,6 +14,8 @@ orocos_use_package(orocos-log4cpp REQUIRED)
 include_directories(SYSTEM ${USE_OROCOS_INCLUDE_DIRS})
 
 ### Orocos Targets ###
+
+include_directories(include)
 
 #Libraries: only .so modules from root CMakeLists are added to *.pc file.
 orocos_library(logger src/logger.cpp) # ...you may add multiple source files
