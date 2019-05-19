@@ -55,13 +55,14 @@ public:
 			.set("NOTSET");
 	}
 
-	string getDefaultCategory(const string& _default_category) 
+	const std::string& getDefaultCategory(const std::string& _default_category) 
 	{
-		if (this->default_category == "NOTSET") return _default_category;
-		else return this->default_category;
+		return this->default_category == "NOTSET"
+			? _default_category
+			: this->default_category;
 	}
 
-	string categoryFromComponentName(const string& component_name)
+	std::string categoryFromComponentName(const std::string& component_name)
 	{
 		return sweetie_bot::logger::categoryFromComponentName(component_name, getDefaultCategory(""));
 	}
